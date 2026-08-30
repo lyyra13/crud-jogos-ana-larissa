@@ -3,11 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\JogoController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::post('/login', [AuthController::class, 'login'])->name('login.authenticate');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
 
