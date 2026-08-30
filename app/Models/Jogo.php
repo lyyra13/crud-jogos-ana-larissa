@@ -21,4 +21,9 @@ class Jogo extends Model
     {
         return $this->belongsTo(Categoria::class);
     }
+
+    protected $casts = [
+    'data_lancamento' => 'date',
+    'preco' => 'decimal:2',
+];
 }
