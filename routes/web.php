@@ -9,6 +9,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+// AUTENTICAÇÃO
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -17,28 +20,40 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.authenticat
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
 
-Route::get('/categorias/create', [CategoriaController::class, 'create'])->name('categorias.create');
+// ROTAS PROTEGIDAS
 
-Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
+Route::middleware('auth')->group(function () {
 
-Route::get('/categorias/{id}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
+    // CATEGORIAS
 
-Route::put('/categorias/{id}', [CategoriaController::class, 'update'])->name('categorias.update');
+    Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index');
 
-Route::delete('/categorias/{id}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
+    Route::get('/categorias/create', [CategoriaController::class, 'create'])->name('categorias.create');
 
-Route::get('/jogos', [JogoController::class, 'index'])->name('jogos.index');
+    Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
 
-Route::get('/jogos/create', [JogoController::class, 'create'])->name('jogos.create');
+    Route::get('/categorias/{id}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
 
-Route::post('/jogos', [JogoController::class, 'store'])->name('jogos.store');
+    Route::put('/categorias/{id}', [CategoriaController::class, 'update'])->name('categorias.update');
 
-Route::get('/jogos/{jogo}', [JogoController::class, 'show'])->name('jogos.show');
+    Route::delete('/categorias/{id}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
 
-Route::get('/jogos/{jogo}/edit', [JogoController::class, 'edit'])->name('jogos.edit');
 
-Route::put('/jogos/{jogo}', [JogoController::class, 'update'])->name('jogos.update');
+    // JOGOS
 
-Route::delete('/jogos/{jogo}', [JogoController::class, 'destroy'])->name('jogos.destroy');
+    Route::get('/jogos', [JogoController::class, 'index'])->name('jogos.index');
+
+    Route::get('/jogos/create', [JogoController::class, 'create'])->name('jogos.create');
+
+    Route::post('/jogos', [JogoController::class, 'store'])->name('jogos.store');
+
+    Route::get('/jogos/{jogo}', [JogoController::class, 'show'])->name('jogos.show');
+
+    Route::get('/jogos/{jogo}/edit', [JogoController::class, 'edit'])->name('jogos.edit');
+
+    Route::put('/jogos/{jogo}', [JogoController::class, 'update'])->name('jogos.update');
+
+    Route::delete('/jogos/{jogo}', [JogoController::class, 'destroy'])->name('jogos.destroy');
+
+});
