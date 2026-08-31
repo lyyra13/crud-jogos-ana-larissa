@@ -19,7 +19,10 @@
             </p>
         </div>
 
-        <a href="{{ route('jogos.create') }}" class="btn btn-primary">
+        <a
+            href="{{ route('jogos.create') }}"
+            class="btn btn-primary"
+        >
             <i class="fas fa-plus me-2"></i>
             Novo Jogo
         </a>
@@ -27,7 +30,7 @@
     </div>
 
 
-    @if(session('success'))
+    @if (session('success'))
 
         <div class="alert alert-success">
             {{ session('success') }}
@@ -36,7 +39,16 @@
     @endif
 
 
-    @if($jogos->count() > 0)
+    @if (session('error'))
+
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+
+    @endif
+
+
+    @if ($jogos->count() > 0)
 
         <div class="table-responsive">
 
@@ -58,21 +70,24 @@
 
                 <tbody>
 
-                    @foreach($jogos as $jogo)
+                    @foreach ($jogos as $jogo)
 
                         <tr>
 
-                            <td>{{ $jogo->nome }}</td>
-
-                            <td>{{ $jogo->desenvolvedora }}</td>
-
-                            <td>{{ $jogo->plataforma }}</td>
+                            <td>
+                                <strong>{{ $jogo->nome }}</strong>
+                            </td>
 
                             <td>
-                                {{ $jogo->data_lancamento
-                                    ? $jogo->data_lancamento->format('d/m/Y')
-                                    : '-'
-                                }}
+                                {{ $jogo->desenvolvedora }}
+                            </td>
+
+                            <td>
+                                {{ $jogo->plataforma }}
+                            </td>
+
+                            <td>
+                                {{ date('d/m/Y', strtotime($jogo->data_lancamento)) }}
                             </td>
 
                             <td>
@@ -86,21 +101,15 @@
                             <td>
 
                                 <a
-                                    href="{{ route('jogos.show', $jogo) }}"
-                                    class="btn btn-info btn-sm"
-                                >
-                                    <i class="fas fa-eye"></i>
-                                </a>
-
-                                <a
-                                    href="{{ route('jogos.edit', $jogo) }}"
+                                    href="{{ route('jogos.edit', $jogo->encrypted_id) }}"
                                     class="btn btn-warning btn-sm"
                                 >
                                     <i class="fas fa-edit"></i>
                                 </a>
 
+
                                 <form
-                                    action="{{ route('jogos.destroy', $jogo) }}"
+                                    action="{{ route('jogos.destroy', $jogo->encrypted_id) }}"
                                     method="POST"
                                     class="d-inline"
                                 >
@@ -133,8 +142,11 @@
     @else
 
         <div class="alert alert-info text-center">
+
             <i class="fas fa-info-circle me-2"></i>
+
             Nenhum jogo cadastrado.
+
         </div>
 
     @endif

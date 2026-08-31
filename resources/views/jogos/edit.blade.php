@@ -29,7 +29,10 @@
                     </div>
 
 
-                    <form action="{{ route('jogos.update', $jogo) }}" method="POST">
+                    <form
+                        action="{{ route('jogos.update', $jogo->encrypted_id) }}"
+                        method="POST"
+                    >
 
                         @csrf
                         @method('PUT')
@@ -38,13 +41,13 @@
                         <div class="mb-3">
 
                             <label for="nome" class="form-label fw-semibold">
-                                Nome do jogo
+                                Nome
                             </label>
 
                             <input
                                 type="text"
-                                name="nome"
                                 id="nome"
+                                name="nome"
                                 class="form-control"
                                 value="{{ old('nome', $jogo->nome) }}"
                                 placeholder="Digite o nome do jogo"
@@ -67,8 +70,8 @@
 
                             <input
                                 type="text"
-                                name="desenvolvedora"
                                 id="desenvolvedora"
+                                name="desenvolvedora"
                                 class="form-control"
                                 value="{{ old('desenvolvedora', $jogo->desenvolvedora) }}"
                                 placeholder="Digite a desenvolvedora"
@@ -91,8 +94,8 @@
 
                             <input
                                 type="text"
-                                name="plataforma"
                                 id="plataforma"
+                                name="plataforma"
                                 class="form-control"
                                 value="{{ old('plataforma', $jogo->plataforma) }}"
                                 placeholder="Ex.: PC, PlayStation, Xbox"
@@ -115,10 +118,10 @@
 
                             <input
                                 type="date"
-                                name="data_lancamento"
                                 id="data_lancamento"
+                                name="data_lancamento"
                                 class="form-control"
-                                value="{{ old('data_lancamento', $jogo->data_lancamento ? $jogo->data_lancamento->format('Y-m-d') : '') }}"
+                                value="{{ old('data_lancamento', $jogo->data_lancamento) }}"
                             >
 
                             @error('data_lancamento')
@@ -136,24 +139,16 @@
                                 Preço
                             </label>
 
-                            <div class="input-group">
-
-                                <span class="input-group-text">
-                                    R$
-                                </span>
-
-                                <input
-                                    type="number"
-                                    name="preco"
-                                    id="preco"
-                                    class="form-control"
-                                    step="0.01"
-                                    min="0"
-                                    value="{{ old('preco', $jogo->preco) }}"
-                                    placeholder="0,00"
-                                >
-
-                            </div>
+                            <input
+                                type="number"
+                                id="preco"
+                                name="preco"
+                                class="form-control"
+                                value="{{ old('preco', $jogo->preco) }}"
+                                step="0.01"
+                                min="0"
+                                placeholder="Digite o preço"
+                            >
 
                             @error('preco')
                                 <div class="text-danger small mt-1">
@@ -171,8 +166,8 @@
                             </label>
 
                             <select
-                                name="categoria_id"
                                 id="categoria_id"
+                                name="categoria_id"
                                 class="form-select"
                             >
 
@@ -180,7 +175,7 @@
                                     Selecione uma categoria
                                 </option>
 
-                                @foreach($categorias as $categoria)
+                                @foreach ($categorias as $categoria)
 
                                     <option
                                         value="{{ $categoria->id }}"
@@ -221,7 +216,6 @@
                             </button>
 
                         </div>
-
                     </form>
 
                 </div>

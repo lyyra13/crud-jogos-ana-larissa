@@ -48,8 +48,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/jogos', [JogoController::class, 'store'])->name('jogos.store');
 
-    Route::get('/jogos/{jogo}', [JogoController::class, 'show'])->name('jogos.show');
-
     Route::get('/jogos/{jogo}/edit', [JogoController::class, 'edit'])->name('jogos.edit');
 
     Route::put('/jogos/{jogo}', [JogoController::class, 'update'])->name('jogos.update');

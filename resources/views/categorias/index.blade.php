@@ -30,6 +30,24 @@
     </div>
 
 
+    @if (session('success'))
+
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+
+    @endif
+
+
+    @if (session('error'))
+
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+
+    @endif
+
+
     @if ($categorias->count() > 0)
 
         <div class="table-responsive">
@@ -43,6 +61,7 @@
                         <th>Descrição</th>
                         <th>Faixa etária</th>
                         <th>Status</th>
+                        <th>Jogos</th>
                         <th>Ações</th>
                     </tr>
 
@@ -72,15 +91,37 @@
 
                             <td>
 
+                                @if ($categoria->jogos->count() > 0)
+
+                                    @foreach ($categoria->jogos as $jogo)
+
+                                        {{ $jogo->nome }}
+
+                                        @if (!$loop->last)
+                                            ,
+                                        @endif
+
+                                    @endforeach
+
+                                @else
+
+                                    Nenhum jogo
+
+                                @endif
+
+                            </td>
+
+                            <td>
+
                                 <a
-                                    href="{{ route('categorias.edit', $categoria->id) }}"
+                                    href="{{ route('categorias.edit', $categoria->encrypted_id) }}"
                                     class="btn btn-warning btn-sm"
                                 >
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 <form
-                                    action="{{ route('categorias.destroy', $categoria->id) }}"
+                                    action="{{ route('categorias.destroy', $categoria->encrypted_id) }}"
                                     method="POST"
                                     class="d-inline"
                                 >

@@ -29,7 +29,7 @@
                     </div>
 
 
-                    <form action="{{ route('categorias.update', $categoria->id) }}" method="POST">
+                    <form action="{{ route('categorias.update', $categoria->encrypted_id) }}" method="POST">
 
                         @csrf
                         @method('PUT')

@@ -5,12 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Jogo;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use App\Services\Operations;
+
 
 class JogoController extends Controller
 {
     public function index()
     {
         $jogos = Jogo::with('categoria')->get();
+
+        foreach ($jogos as $jogo) {
+            $jogo->encrypted_id = Operations::encryptId($jogo->id);
+        }
 
         return view('jogos.index', compact('jogos'));
     }
@@ -40,22 +46,40 @@ class JogoController extends Controller
             ->with('success', 'Jogo cadastrado com sucesso!');
     }
 
-    public function show(Jogo $jogo)
+    public function edit($id)
     {
-        $jogo->load('categoria');
+        $jogoId = Operations::decryptId($id);
 
-        return view('jogos.show', compact('jogo'));
-    }
+        $jogo = Jogo::find($jogoId);
 
-    public function edit(Jogo $jogo)
-    {
+        if (!$jogo) {
+            return redirect()
+                ->route('jogos.index')
+                ->with('error', 'Jogo não encontrado.');
+        }
+
+        $jogo->encrypted_id = Operations::encryptId($jogo->id);
+
         $categorias = Categoria::all();
 
-        return view('jogos.edit', compact('jogo', 'categorias'));
+        return view('jogos.edit', [
+            'jogo' => $jogo,
+            'categorias' => $categorias
+        ]);
     }
 
-    public function update(Request $request, Jogo $jogo)
+    public function update(Request $request, $id)
     {
+        $jogoId = Operations::decryptId($id);
+
+        $jogo = Jogo::find($jogoId);
+
+        if (!$jogo) {
+            return redirect()
+                ->route('jogos.index')
+                ->with('error', 'Jogo não encontrado.');
+        }
+
         $request->validate([
             'nome' => 'required|string|max:255',
             'desenvolvedora' => 'required|string|max:255',
@@ -72,8 +96,18 @@ class JogoController extends Controller
             ->with('success', 'Jogo atualizado com sucesso!');
     }
 
-    public function destroy(Jogo $jogo)
+    public function destroy($id)
     {
+        $jogoId = Operations::decryptId($id);
+
+        $jogo = Jogo::find($jogoId);
+
+        if (!$jogo) {
+            return redirect()
+                ->route('jogos.index')
+                ->with('error', 'Jogo não encontrado.');
+        }
+
         $jogo->delete();
 
         return redirect()
