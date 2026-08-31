@@ -1,3 +1,4 @@
+```php
 @extends('layouts.layout1')
 
 @section('content')
@@ -73,14 +74,14 @@
                             <td>
 
                                 <a
-                                    href="{{ route('categorias.edit', $categoria->id) }}"
+                                    href="{{ route('categorias.edit', $categoria->encrypted_id) }}"
                                     class="btn btn-warning btn-sm"
                                 >
                                     <i class="fas fa-edit"></i>
                                 </a>
 
                                 <form
-                                    action="{{ route('categorias.destroy', $categoria->id) }}"
+                                    action="{{ route('categorias.destroy', $categoria->encrypted_id) }}"
                                     method="POST"
                                     class="d-inline"
                                 >
