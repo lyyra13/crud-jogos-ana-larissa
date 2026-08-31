@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Categoria</title>
+</head>
+<body>
+
+    <h1>Cadastrar Categoria</h1>
+
+    <form action="{{ route('categorias.store') }}" method="POST">
+        @csrf
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{ old('nome') }}">
+
+        @error('nome')
+            <p>{{ $message }}</p>
+        @enderror
+
+        <br><br>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao">{{ old('descricao') }}</textarea>
+
+        @error('descricao')
+            <p>{{ $message }}</p>
+        @enderror
+
+        <br><br>
+
+        <label for="faixa_etaria">Faixa etária:</label>
+        <input type="text" id="faixa_etaria" name="faixa_etaria" value="{{ old('faixa_etaria') }}">
+
+        @error('faixa_etaria')
+            <p>{{ $message }}</p>
+        @enderror
+
+        <br><br>
+
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" value="{{ old('status') }}">
+
+        @error('status')
+            <p>{{ $message }}</p>
+        @enderror
+
+        <br><br>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+</body>
+</html>
