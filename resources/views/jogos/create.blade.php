@@ -2,132 +2,234 @@
 
 @section('content')
 
-<div class="container mt-5">
+<div class="container py-5">
 
-    <div class="row justify-content-center">
-        <div class="col">
+    @include('top_bar')
 
-            @include('top_bar')
+    <div class="row justify-content-center mt-4">
 
-            <form action="{{ route('jogos.store') }}" method="POST">
+        <div class="col-md-8 col-lg-7">
 
-                @csrf
+            <div class="card shadow-sm border-0">
 
-                <div class="mb-3 mt-3">
-                    <label for="nome" class="form-label">Nome do jogo</label>
-                    <input type="text" name="nome" id="nome" class="form-control bg-primary text-white" value="{{ old('nome') }}">
+                <div class="card-body p-4 p-md-5">
 
-                    @error('nome')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+                    <div class="text-center mb-4">
 
-                <div class="mb-3">
-                    <label for="desenvolvedora" class="form-label">Desenvolvedora</label>
-                    <input type="text" name="desenvolvedora" id="desenvolvedora" class="form-control bg-primary text-white" value="{{ old('desenvolvedora') }}">
+                        <i class="fas fa-gamepad fa-3x text-primary mb-3"></i>
 
-                    @error('desenvolvedora')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
+                        <h1 class="fw-bold">
+                            Cadastrar Jogo
+                        </h1>
 
-                <div class="mb-3">
-                    <label for="plataforma" class="form-label">Platforma</label>
-
-                    <input type="text" name="plataforma" id="plataforma" class="form-control bg-primary text-white" value="{{ old('plataforma') }}">
-
-                    @error('plataforma')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="data_lancamento" class="form-label">Data lançamento</label>
-
-                    <input type="date" name="data_lancamento" id="data_lancamento" class="form-control bg-primary text-white" value="{{ old('data_lancamento') }}">
-
-                    @error('data_lancamento')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="preco" class="form-label">Preço</label>
-
-                    <input type="number" name="preco" id="preco" class="form-control bg-primary text-white" step="0.01" min="0" value="{{ old('preco') }}">
-
-                    @error('preco')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="categoria_id" class="form-label">
-                        Category
-                    </label>
-
-                    <select
-                        name="categoria_id"
-                        id="categoria_id"
-                        class="form-select bg-primary text-white"
-                    >
-                        <option value="">Select a category</option>
-
-                        @foreach($categorias as $categoria)
-
-                            <option
-                                value="{{ $categoria->id }}"
-                                {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}
-                            >
-                                {{ $categoria->nome }}
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                    @error('categoria_id')
-                        <div class="text-danger">
-                            {{ $message }}
-                        </div>
-                    @enderror
-                </div>
-
-                <div class="row mt-3">
-                    <div class="col text-end">
-
-                        <a
-                            href="{{ route('jogos.index') }}"
-                            class="btn btn-primary px-5"
-                        >
-                            <i class="fa-solid fa-ban me-2"></i>
-                            Cancel
-                        </a>
-
-                        <button
-                            type="submit"
-                            class="btn btn-secondary px-5"
-                        >
-                            <i class="fa-regular fa-circle-check me-2"></i>
-                            Save
-                        </button>
+                        <p class="text-muted">
+                            Preencha os dados do novo jogo.
+                        </p>
 
                     </div>
+
+
+                    <form action="{{ route('jogos.store') }}" method="POST">
+
+                        @csrf
+
+
+                        <div class="mb-3">
+
+                            <label for="nome" class="form-label fw-semibold">
+                                Nome do jogo
+                            </label>
+
+                            <input
+                                type="text"
+                                name="nome"
+                                id="nome"
+                                class="form-control"
+                                value="{{ old('nome') }}"
+                                placeholder="Digite o nome do jogo"
+                            >
+
+                            @error('nome')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="desenvolvedora" class="form-label fw-semibold">
+                                Desenvolvedora
+                            </label>
+
+                            <input
+                                type="text"
+                                name="desenvolvedora"
+                                id="desenvolvedora"
+                                class="form-control"
+                                value="{{ old('desenvolvedora') }}"
+                                placeholder="Digite a desenvolvedora"
+                            >
+
+                            @error('desenvolvedora')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="plataforma" class="form-label fw-semibold">
+                                Plataforma
+                            </label>
+
+                            <input
+                                type="text"
+                                name="plataforma"
+                                id="plataforma"
+                                class="form-control"
+                                value="{{ old('plataforma') }}"
+                                placeholder="Ex.: PC, PlayStation, Xbox"
+                            >
+
+                            @error('plataforma')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="data_lancamento" class="form-label fw-semibold">
+                                Data de lançamento
+                            </label>
+
+                            <input
+                                type="date"
+                                name="data_lancamento"
+                                id="data_lancamento"
+                                class="form-control"
+                                value="{{ old('data_lancamento') }}"
+                            >
+
+                            @error('data_lancamento')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="preco" class="form-label fw-semibold">
+                                Preço
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    R$
+                                </span>
+
+                                <input
+                                    type="number"
+                                    name="preco"
+                                    id="preco"
+                                    class="form-control"
+                                    step="0.01"
+                                    min="0"
+                                    value="{{ old('preco') }}"
+                                    placeholder="0,00"
+                                >
+
+                            </div>
+
+                            @error('preco')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label for="categoria_id" class="form-label fw-semibold">
+                                Categoria
+                            </label>
+
+                            <select
+                                name="categoria_id"
+                                id="categoria_id"
+                                class="form-select"
+                            >
+
+                                <option value="">
+                                    Selecione uma categoria
+                                </option>
+
+                                @foreach($categorias as $categoria)
+
+                                    <option
+                                        value="{{ $categoria->id }}"
+                                        {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}
+                                    >
+                                        {{ $categoria->nome }}
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                            @error('categoria_id')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a
+                                href="{{ route('jogos.index') }}"
+                                class="btn btn-outline-secondary"
+                            >
+                                <i class="fas fa-ban me-2"></i>
+                                Cancelar
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-check me-2"></i>
+                                Cadastrar jogo
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
                 </div>
 
-            </form>
+            </div>
 
         </div>
+
     </div>
 
 </div>

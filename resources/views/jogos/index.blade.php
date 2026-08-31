@@ -4,41 +4,46 @@
 
 <div class="container mt-5">
 
-    <div class="row justify-content-center">
-        <div class="col">
-
-            @include('top_bar')
-
-            <div class="row mb-3">
-                <div class="col">
-                    <p class="display-6 mb-0">Jogos</p>
-                </div>
-
-            </div>
-
-
-<div class="container mt-4">
+    @include('top_bar')
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Jogos</h1>
+
+        <div>
+            <h1>
+                <i class="fas fa-gamepad me-2"></i>
+                Jogos
+            </h1>
+
+            <p class="text-muted mb-0">
+                Gerencie os jogos cadastrados no sistema.
+            </p>
+        </div>
 
         <a href="{{ route('jogos.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Novo Jogo
+            <i class="fas fa-plus me-2"></i>
+            Novo Jogo
         </a>
+
     </div>
 
+
     @if(session('success'))
+
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
+
     @endif
+
 
     @if($jogos->count() > 0)
 
         <div class="table-responsive">
+
             <table class="table table-striped table-bordered align-middle">
 
                 <thead class="table-dark">
+
                     <tr>
                         <th>Nome</th>
                         <th>Desenvolvedora</th>
@@ -48,10 +53,13 @@
                         <th>Categoria</th>
                         <th>Ações</th>
                     </tr>
+
                 </thead>
 
                 <tbody>
+
                     @foreach($jogos as $jogo)
+
                         <tr>
 
                             <td>{{ $jogo->nome }}</td>
@@ -61,7 +69,10 @@
                             <td>{{ $jogo->plataforma }}</td>
 
                             <td>
-                                {{ $jogo->data_lancamento ? $jogo->data_lancamento->format('d/m/Y') : '-' }}
+                                {{ $jogo->data_lancamento
+                                    ? $jogo->data_lancamento->format('d/m/Y')
+                                    : '-'
+                                }}
                             </td>
 
                             <td>
@@ -73,42 +84,56 @@
                             </td>
 
                             <td>
-                                <a href="{{ route('jogos.show', $jogo) }}"
-                                   class="btn btn-info btn-sm">
+
+                                <a
+                                    href="{{ route('jogos.show', $jogo) }}"
+                                    class="btn btn-info btn-sm"
+                                >
                                     <i class="fas fa-eye"></i>
                                 </a>
 
-                                <a href="{{ route('jogos.edit', $jogo) }}"
-                                   class="btn btn-warning btn-sm">
+                                <a
+                                    href="{{ route('jogos.edit', $jogo) }}"
+                                    class="btn btn-warning btn-sm"
+                                >
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <form action="{{ route('jogos.destroy', $jogo) }}"
-                                      method="POST"
-                                      class="d-inline">
+                                <form
+                                    action="{{ route('jogos.destroy', $jogo) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                >
 
                                     @csrf
                                     @method('DELETE')
 
-                                    <button type="submit"
-                                            class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Deseja realmente excluir este jogo?')">
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Deseja realmente excluir este jogo?')"
+                                    >
                                         <i class="fas fa-trash"></i>
                                     </button>
 
                                 </form>
+
                             </td>
 
                         </tr>
+
                     @endforeach
+
                 </tbody>
 
             </table>
+
         </div>
 
     @else
 
-        <div class="alert alert-info">
+        <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i>
             Nenhum jogo cadastrado.
         </div>
 

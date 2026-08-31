@@ -1,55 +1,165 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Categoria</title>
-</head>
-<body>
+@extends('layouts.layout1')
 
-    <h1>Cadastrar Categoria</h1>
+@section('content')
 
-    <form action="{{ route('categorias.store') }}" method="POST">
-        @csrf
+<div class="container py-5">
 
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" value="{{ old('nome') }}">
+    @include('top_bar')
 
-        @error('nome')
-            <p>{{ $message }}</p>
-        @enderror
+    <div class="row justify-content-center mt-4">
 
-        <br><br>
+        <div class="col-md-8 col-lg-7">
 
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao">{{ old('descricao') }}</textarea>
+            <div class="card shadow-sm border-0">
 
-        @error('descricao')
-            <p>{{ $message }}</p>
-        @enderror
+                <div class="card-body p-4 p-md-5">
 
-        <br><br>
+                    <div class="text-center mb-4">
 
-        <label for="faixa_etaria">Faixa etária:</label>
-        <input type="text" id="faixa_etaria" name="faixa_etaria" value="{{ old('faixa_etaria') }}">
+                        <i class="fas fa-tags fa-3x text-primary mb-3"></i>
 
-        @error('faixa_etaria')
-            <p>{{ $message }}</p>
-        @enderror
+                        <h1 class="fw-bold">
+                            Cadastrar Categoria
+                        </h1>
 
-        <br><br>
+                        <p class="text-muted">
+                            Preencha os dados da nova categoria.
+                        </p>
 
-        <label for="status">Status:</label>
-        <input type="text" id="status" name="status" value="{{ old('status') }}">
+                    </div>
 
-        @error('status')
-            <p>{{ $message }}</p>
-        @enderror
 
-        <br><br>
+                    <form action="{{ route('categorias.store') }}" method="POST">
 
-        <button type="submit">Cadastrar</button>
-    </form>
+                        @csrf
 
-</body>
-</html>
+
+                        <div class="mb-3">
+
+                            <label for="nome" class="form-label fw-semibold">
+                                Nome
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nome"
+                                name="nome"
+                                class="form-control"
+                                value="{{ old('nome') }}"
+                                placeholder="Digite o nome da categoria"
+                            >
+
+                            @error('nome')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="descricao" class="form-label fw-semibold">
+                                Descrição
+                            </label>
+
+                            <textarea
+                                id="descricao"
+                                name="descricao"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Digite uma descrição para a categoria"
+                            >{{ old('descricao') }}</textarea>
+
+                            @error('descricao')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label for="faixa_etaria" class="form-label fw-semibold">
+                                Faixa etária
+                            </label>
+
+                            <input
+                                type="text"
+                                id="faixa_etaria"
+                                name="faixa_etaria"
+                                class="form-control"
+                                value="{{ old('faixa_etaria') }}"
+                                placeholder="Ex.: Livre, 10+, 12+, 16+"
+                            >
+
+                            @error('faixa_etaria')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label for="status" class="form-label fw-semibold">
+                                Status
+                            </label>
+
+                            <input
+                                type="text"
+                                id="status"
+                                name="status"
+                                class="form-control"
+                                value="{{ old('status') }}"
+                                placeholder="Ex.: Ativo"
+                            >
+
+                            @error('status')
+                                <div class="text-danger small mt-1">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                        </div>
+
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a
+                                href="{{ route('categorias.index') }}"
+                                class="btn btn-outline-secondary"
+                            >
+                                <i class="fas fa-ban me-2"></i>
+                                Cancelar
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                <i class="fas fa-check me-2"></i>
+                                Cadastrar categoria
+                            </button>
+
+                        </div>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@endsection

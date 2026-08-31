@@ -1,44 +1,127 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorias - Jogos</title>
-</head>
-<body>
+@extends('layouts.layout1')
 
-    <h1>Categorias de Jogos</h1>
+@section('content')
 
-    <a href="{{ route('categorias.create') }}">Cadastrar nova categoria</a>
+<div class="container mt-5">
 
-    <br><br>
+    @include('top_bar')
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>
+                <i class="fas fa-tags me-2"></i>
+                Categorias
+            </h1>
+
+            <p class="text-muted mb-0">
+                Gerencie as categorias dos jogos.
+            </p>
+        </div>
+
+        <a
+            href="{{ route('categorias.create') }}"
+            class="btn btn-primary"
+        >
+            <i class="fas fa-plus me-2"></i>
+            Nova Categoria
+        </a>
+
+    </div>
+
 
     @if ($categorias->count() > 0)
 
-        <ul>
-            @foreach ($categorias as $categoria)
-                <li>
-                    <strong>{{ $categoria->nome }}</strong>
-                    - {{ $categoria->descricao }}
+        <div class="table-responsive">
 
-                    <a href="{{ route('categorias.edit', $categoria->id) }}">
-                        Editar
-                    </a>
-            <form action="{{ route('categorias.destroy', $categoria->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
+            <table class="table table-striped table-bordered align-middle">
 
-            <button type="submit">Excluir</button>
-</form>
-                </li>
-            @endforeach
-        </ul>
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Faixa etária</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach ($categorias as $categoria)
+
+                        <tr>
+
+                            <td>
+                                <strong>{{ $categoria->nome }}</strong>
+                            </td>
+
+                            <td>
+                                {{ $categoria->descricao }}
+                            </td>
+
+                            <td>
+                                {{ $categoria->faixa_etaria }}
+                            </td>
+
+                            <td>
+                                {{ $categoria->status }}
+                            </td>
+
+                            <td>
+
+                                <a
+                                    href="{{ route('categorias.edit', $categoria->id) }}"
+                                    class="btn btn-warning btn-sm"
+                                >
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <form
+                                    action="{{ route('categorias.destroy', $categoria->id) }}"
+                                    method="POST"
+                                    class="d-inline"
+                                >
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Deseja realmente excluir esta categoria?')"
+                                    >
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     @else
 
-        <p>Nenhuma categoria cadastrada.</p>
+        <div class="alert alert-info text-center">
+
+            <i class="fas fa-info-circle me-2"></i>
+
+            Nenhuma categoria cadastrada.
+
+        </div>
 
     @endif
 
-</body>
-</html>
+</div>
+
+@endsection
