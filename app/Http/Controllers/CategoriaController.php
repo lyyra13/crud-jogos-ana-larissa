@@ -10,7 +10,7 @@ class CategoriaController extends Controller
 { 
     public function index() 
     { 
-        $categorias = Categoria::all(); 
+        $categorias = Categoria::with('jogos')->get(); 
  
         foreach ($categorias as $categoria) {
             $categoria->encrypted_id = Operations::encryptId($categoria->id);
@@ -35,14 +35,24 @@ class CategoriaController extends Controller
  
         Categoria::create($dados); 
  
-        return redirect()->route('categorias.index'); 
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', 'Categoria cadastrada com sucesso!');
     } 
  
     public function edit($id) 
     { 
         $categoriaId = Operations::decryptId($id);
 
-        $categoria = Categoria::find($categoriaId); 
+        $categoria = Categoria::find($categoriaId);
+
+        if (!$categoria) {
+            return redirect()
+                ->route('categorias.index')
+                ->with('error', 'Categoria não encontrada.');
+        }
+
+        $categoria->encrypted_id = Operations::encryptId($categoria->id);
  
         return view('categorias.edit', ['categoria' => $categoria]); 
     } 
@@ -53,6 +63,12 @@ class CategoriaController extends Controller
 
         $categoria = Categoria::find($categoriaId);
 
+        if (!$categoria) {
+            return redirect()
+                ->route('categorias.index')
+                ->with('error', 'Categoria não encontrada.');
+        }
+
         $dados = $request->validate([ 
             'nome' => 'required', 
             'descricao' => 'required', 
@@ -62,21 +78,33 @@ class CategoriaController extends Controller
  
         $categoria->update($dados); 
  
-        return redirect()->route('categorias.index'); 
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', 'Categoria atualizada com sucesso!');
     } 
  
     public function destroy($id) 
     { 
         $categoriaId = Operations::decryptId($id);
 
-        $categoria = Categoria::find($categoriaId); 
+        $categoria = Categoria::find($categoriaId);
+
+        if (!$categoria) {
+            return redirect()
+                ->route('categorias.index')
+                ->with('error', 'Categoria não encontrada.');
+        }
  
         if ($categoria->jogos()->count() > 0) { 
-            return redirect()->route('categorias.index'); 
+            return redirect()
+                ->route('categorias.index')
+                ->with('error', 'Não é possível excluir uma categoria que possui jogos.');
         } 
  
         $categoria->delete(); 
  
-        return redirect()->route('categorias.index'); 
+        return redirect()
+            ->route('categorias.index')
+            ->with('success', 'Categoria excluída com sucesso!');
     } 
 }

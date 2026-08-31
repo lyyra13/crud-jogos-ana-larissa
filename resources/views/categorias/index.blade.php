@@ -1,4 +1,3 @@
-```php
 @extends('layouts.layout1')
 
 @section('content')
@@ -31,6 +30,24 @@
     </div>
 
 
+    @if (session('success'))
+
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+
+    @endif
+
+
+    @if (session('error'))
+
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+
+    @endif
+
+
     @if ($categorias->count() > 0)
 
         <div class="table-responsive">
@@ -44,6 +61,7 @@
                         <th>Descrição</th>
                         <th>Faixa etária</th>
                         <th>Status</th>
+                        <th>Jogos</th>
                         <th>Ações</th>
                     </tr>
 
@@ -69,6 +87,28 @@
 
                             <td>
                                 {{ $categoria->status }}
+                            </td>
+
+                            <td>
+
+                                @if ($categoria->jogos->count() > 0)
+
+                                    @foreach ($categoria->jogos as $jogo)
+
+                                        {{ $jogo->nome }}
+
+                                        @if (!$loop->last)
+                                            ,
+                                        @endif
+
+                                    @endforeach
+
+                                @else
+
+                                    Nenhum jogo
+
+                                @endif
+
                             </td>
 
                             <td>
