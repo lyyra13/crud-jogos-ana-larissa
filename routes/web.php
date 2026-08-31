@@ -20,7 +20,6 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.authenticat
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
 // ROTAS PROTEGIDAS
 
 Route::middleware('auth')->group(function () {
@@ -53,5 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/jogos/{jogo}', [JogoController::class, 'update'])->name('jogos.update');
 
     Route::delete('/jogos/{jogo}', [JogoController::class, 'destroy'])->name('jogos.destroy');
+
+    
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 });
