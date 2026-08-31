@@ -46,26 +46,26 @@ class JogoController extends Controller
             ->with('success', 'Jogo cadastrado com sucesso!');
     }
 
-    public function show($id)
-    {
-        $jogoId = Operations::decryptId($id);
-
-        $jogo = Jogo::find($jogoId);
-
-        $jogo->load('categoria');
-
-        return view('jogos.show', ['jogo' => $jogo]);
-    }
-
     public function edit($id)
     {
         $jogoId = Operations::decryptId($id);
 
         $jogo = Jogo::find($jogoId);
 
+        if (!$jogo) {
+            return redirect()
+                ->route('jogos.index')
+                ->with('error', 'Jogo não encontrado.');
+        }
+
+        $jogo->encrypted_id = Operations::encryptId($jogo->id);
+
         $categorias = Categoria::all();
 
-        return view('jogos.edit', ['jogo' => $jogo, 'categorias' => $categorias]);
+        return view('jogos.edit', [
+            'jogo' => $jogo,
+            'categorias' => $categorias
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -73,6 +73,12 @@ class JogoController extends Controller
         $jogoId = Operations::decryptId($id);
 
         $jogo = Jogo::find($jogoId);
+
+        if (!$jogo) {
+            return redirect()
+                ->route('jogos.index')
+                ->with('error', 'Jogo não encontrado.');
+        }
 
         $request->validate([
             'nome' => 'required|string|max:255',
@@ -96,6 +102,12 @@ class JogoController extends Controller
 
         $jogo = Jogo::find($jogoId);
 
+        if (!$jogo) {
+            return redirect()
+                ->route('jogos.index')
+                ->with('error', 'Jogo não encontrado.');
+        }
+
         $jogo->delete();
 
         return redirect()
@@ -103,4 +115,3 @@ class JogoController extends Controller
             ->with('success', 'Jogo excluído com sucesso!');
     }
 }
-
