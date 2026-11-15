@@ -10,16 +10,18 @@ use App\Services\Operations;
 
 class JogoController extends Controller
 {
-    public function index()
-    {
-        $jogos = Jogo::with('categoria')->get();
+   public function index()
+{
+    $jogos = Jogo::with('categoria')->paginate(5);
 
-        foreach ($jogos as $jogo) {
-            $jogo->encrypted_id = Operations::encryptId($jogo->id);
-        }
-
-        return view('jogos.index', compact('jogos'));
+    foreach ($jogos as $jogo) {
+        $jogo->encrypted_id = Operations::encryptId($jogo->id);
     }
+
+    return view('jogos.index', compact('jogos'));
+}
+
+    
 
     public function create()
     {

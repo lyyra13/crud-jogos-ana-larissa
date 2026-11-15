@@ -139,6 +139,8 @@
 
         </div>
 
+        {{ $jogos->links('vendor.pagination.custom') }}
+
     @else
 
         <div class="alert alert-info text-center">
