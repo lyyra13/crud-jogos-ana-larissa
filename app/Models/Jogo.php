@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Categoria;
 
 class Jogo extends Model
 {
@@ -13,9 +12,15 @@ class Jogo extends Model
         'nome',
         'desenvolvedora',
         'plataforma',
+        'desenvolvedora_id',
         'data_lancamento',
         'preco',
         'categoria_id',
+    ];
+
+    protected $casts = [
+        'data_lancamento' => 'date',
+        'preco' => 'decimal:2',
     ];
 
     public function categoria()
@@ -23,8 +28,18 @@ class Jogo extends Model
         return $this->belongsTo(Categoria::class);
     }
 
-    protected $casts = [
-    'data_lancamento' => 'date',
-    'preco' => 'decimal:2',
-];
+    public function desenvolvedora()
+    {
+        return $this->belongsTo(Desenvolvedora::class);
+    }
+
+    public function plataformas()
+    {
+        return $this->belongsToMany(Plataforma::class, 'jogo_plataforma');
+    }
+
+    public function avaliacoes()
+    {
+        return $this->hasMany(Avaliacao::class);
+    }
 }
