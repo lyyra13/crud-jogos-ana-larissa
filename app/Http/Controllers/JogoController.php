@@ -4,44 +4,73 @@ namespace App\Http\Controllers;
 
 use App\Models\Jogo;
 use App\Models\Categoria;
+use App\Models\Desenvolvedora;
+use App\Models\Plataforma;
 use Illuminate\Http\Request;
 use App\Services\Operations;
 
-
 class JogoController extends Controller
 {
-   public function index()
-{
-    $jogos = Jogo::with('categoria')->paginate(5);
+    public function index()
+    {
+        $jogos = Jogo::with([
+            'categoria',
+            'desenvolvedoraRelacionada',
+            'plataformas'
+        ])->paginate(5);
 
-    foreach ($jogos as $jogo) {
-        $jogo->encrypted_id = Operations::encryptId($jogo->id);
+        foreach ($jogos as $jogo) {
+            $jogo->encrypted_id = Operations::encryptId($jogo->id);
+        }
+
+        return view('jogos.index', compact('jogos'));
     }
-
-    return view('jogos.index', compact('jogos'));
-}
-
-    
 
     public function create()
     {
         $categorias = Categoria::all();
+        $desenvolvedoras = Desenvolvedora::all();
+        $plataformas = Plataforma::all();
 
-        return view('jogos.create', compact('categorias'));
+        return view('jogos.create', compact(
+            'categorias',
+            'desenvolvedoras',
+            'plataformas'
+        ));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $dados = $request->validate([
             'nome' => 'required|string|max:255',
-            'desenvolvedora' => 'required|string|max:255',
-            'plataforma' => 'required|string|max:255',
+            'desenvolvedora_id' => 'required|exists:desenvolvedoras,id',
+            'plataformas' => 'required|array|min:1',
+            'plataformas.*' => 'required|exists:plataformas,id',
             'data_lancamento' => 'required|date',
             'preco' => 'required|numeric|min:0',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
-        Jogo::create($request->all());
+        $desenvolvedora = Desenvolvedora::findOrFail(
+            $dados['desenvolvedora_id']
+        );
+
+        $nomesPlataformas = Plataforma::whereIn(
+            'id',
+            $dados['plataformas']
+        )->pluck('nome')->implode(', ');
+
+        $jogo = Jogo::create([
+            'nome' => $dados['nome'],
+            'desenvolvedora_id' => $desenvolvedora->id,
+            'desenvolvedora' => $desenvolvedora->nome,
+            'plataforma' => $nomesPlataformas,
+            'data_lancamento' => $dados['data_lancamento'],
+            'preco' => $dados['preco'],
+            'categoria_id' => $dados['categoria_id'],
+        ]);
+
+        $jogo->plataformas()->sync($dados['plataformas']);
 
         return redirect()
             ->route('jogos.index')
@@ -52,7 +81,7 @@ class JogoController extends Controller
     {
         $jogoId = Operations::decryptId($id);
 
-        $jogo = Jogo::find($jogoId);
+        $jogo = Jogo::with('plataformas')->find($jogoId);
 
         if (!$jogo) {
             return redirect()
@@ -63,11 +92,15 @@ class JogoController extends Controller
         $jogo->encrypted_id = Operations::encryptId($jogo->id);
 
         $categorias = Categoria::all();
+        $desenvolvedoras = Desenvolvedora::all();
+        $plataformas = Plataforma::all();
 
-        return view('jogos.edit', [
-            'jogo' => $jogo,
-            'categorias' => $categorias
-        ]);
+        return view('jogos.edit', compact(
+            'jogo',
+            'categorias',
+            'desenvolvedoras',
+            'plataformas'
+        ));
     }
 
     public function update(Request $request, $id)
@@ -82,16 +115,36 @@ class JogoController extends Controller
                 ->with('error', 'Jogo não encontrado.');
         }
 
-        $request->validate([
+        $dados = $request->validate([
             'nome' => 'required|string|max:255',
-            'desenvolvedora' => 'required|string|max:255',
-            'plataforma' => 'required|string|max:255',
+            'desenvolvedora_id' => 'required|exists:desenvolvedoras,id',
+            'plataformas' => 'required|array|min:1',
+            'plataformas.*' => 'required|exists:plataformas,id',
             'data_lancamento' => 'required|date',
             'preco' => 'required|numeric|min:0',
             'categoria_id' => 'required|exists:categorias,id',
         ]);
 
-        $jogo->update($request->all());
+        $desenvolvedora = Desenvolvedora::findOrFail(
+            $dados['desenvolvedora_id']
+        );
+
+        $nomesPlataformas = Plataforma::whereIn(
+            'id',
+            $dados['plataformas']
+        )->pluck('nome')->implode(', ');
+
+        $jogo->update([
+            'nome' => $dados['nome'],
+            'desenvolvedora_id' => $desenvolvedora->id,
+            'desenvolvedora' => $desenvolvedora->nome,
+            'plataforma' => $nomesPlataformas,
+            'data_lancamento' => $dados['data_lancamento'],
+            'preco' => $dados['preco'],
+            'categoria_id' => $dados['categoria_id'],
+        ]);
+
+        $jogo->plataformas()->sync($dados['plataformas']);
 
         return redirect()
             ->route('jogos.index')

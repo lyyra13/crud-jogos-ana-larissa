@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\JogoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DesenvolvedoraController;
+use App\Http\Controllers\PlataformaController;
+use App\Http\Controllers\AvaliacaoController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [JogoController::class, 'index'])->name('home');
 
 // AUTENTICAÇÃO
 
@@ -54,4 +54,29 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/jogos/{jogo}', [JogoController::class, 'destroy'])->name('jogos.destroy');
 
+    // DESENVOLVEDORAS
+Route::get('/desenvolvedoras', [DesenvolvedoraController::class, 'index'])->name('desenvolvedoras.index');
+Route::get('/desenvolvedoras/create', [DesenvolvedoraController::class, 'create'])->name('desenvolvedoras.create');
+Route::post('/desenvolvedoras', [DesenvolvedoraController::class, 'store'])->name('desenvolvedoras.store');
+Route::get('/desenvolvedoras/{id}/edit', [DesenvolvedoraController::class, 'edit'])->name('desenvolvedoras.edit');
+Route::put('/desenvolvedoras/{id}', [DesenvolvedoraController::class, 'update'])->name('desenvolvedoras.update');
+Route::delete('/desenvolvedoras/{id}', [DesenvolvedoraController::class, 'destroy'])->name('desenvolvedoras.destroy');
+
+// PLATAFORMAS
+Route::get('/plataformas', [PlataformaController::class, 'index'])->name('plataformas.index');
+Route::get('/plataformas/create', [PlataformaController::class, 'create'])->name('plataformas.create');
+Route::post('/plataformas', [PlataformaController::class, 'store'])->name('plataformas.store');
+Route::get('/plataformas/{id}/edit', [PlataformaController::class, 'edit'])->name('plataformas.edit');
+Route::put('/plataformas/{id}', [PlataformaController::class, 'update'])->name('plataformas.update');
+Route::delete('/plataformas/{id}', [PlataformaController::class, 'destroy'])->name('plataformas.destroy');
+
+
+// AVALIAÇÕES
+
+Route::get('/jogos/{id}/avaliacoes', [AvaliacaoController::class, 'index'])
+    ->name('jogos.avaliacoes');
+
+Route::post('/jogos/{id}/avaliacoes', [AvaliacaoController::class, 'store'])
+    ->name('avaliacoes.store');
+    
 });
